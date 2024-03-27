@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css" />
+  <link href="/css/style.css" rel="stylesheet" />
+  <title>View Comments</title>
+</head>
+
+<body>
+  <main>
+    <header class="authOptions">
+      <h1>Comments</h1>
+      <div class="authBtn">
+        <a class="headerBtn" role="button" href="/posts">Home</a>
+        <a class="headerBtn" role="button" href="/subs/list">Subgroups</a>
+      </div>
+    </header>
+    <section class="comments-section">
+      <div class="comment-list">
+        <% comments.forEach((comment)=> { %>
+          <div class="comment">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1.2rem" height="1.7rem" viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4s-4 1.79-4 4s1.79 4 4 4m0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4" />
+            </svg>
+            <strong>
+              <%= comment.creator.uname %>
+            </strong>
+            <p class="comments">
+              <%= formatTimestamp(comment.timestamp) %>
+            </p>
+          </div>
+          <div>
+            <p>
+              <%= comment.description %>
+            </p>
+          </div>
+          <div class="comment-options">
+            <% if (creator && comment.creator && creator===comment.creator.id) { %>
+              <a class="deleteBtn" role="button"
+                href="/comments/comment-delete/<%= post.id %>/<%= comment.id %>">Delete</a>
+              <% } else { %>
+                <% } %>
+                  <span class="voteBtn">
+                    <a class="btn upvoteBtn" data-postid="<%= comment.id %>">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256">
+                        <path fill="currentColor"
+                          d="m228.24 115.76l-96-96a6 6 0 0 0-8.48 0l-96 96A6 6 0 0 0 32 126h42v82a14 14 0 0 0 14 14h80a14 14 0 0 0 14-14v-82h42a6 6 0 0 0 4.24-10.24M176 114a6 6 0 0 0-6 6v88a2 2 0 0 1-2 2H88a2 2 0 0 1-2-2v-88a6 6 0 0 0-6-6H46.49L128 32.49L209.51 114Z" />
+                      </svg>
+                    </a>
+                    <span class="upvoteCount" id="upvoteCount_<%= comment.id %>">0</span>
+
+                    <a class="downvoteBtn" href="#" data-postid="<%= comment.id %>">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256">
+                        <path fill="currentColor"
+                          d="M231.39 132.94A8 8 0 0 0 224 128h-40V48a16 16 0 0 0-16-16H88a16 16 0 0 0-16 16v80H32a8 8 0 0 0-5.66 13.66l96 96a8 8 0 0 0 11.32 0l96-96a8 8 0 0 0 1.73-8.72M128 220.69L51.31 144H80a8 8 0 0 0 8-8V48h80v88a8 8 0 0 0 8 8h28.69Z" />
+                      </svg>
+                    </a>
+                    <span class="downvoteCount" id="downvoteCount_<%= comment.id %>">0</span>
+                  </span>
+          </div>
+          <hr />
+          <% }) %>
+      </div>
+    </section>
+    <section>
+      <h2>Add Comment</h2>
+      <form id="createCommentForm" action="/comments/comment-create/<%= postId %>" method="post">
+        <textarea name="description" rows="4" placeholder="Add a comment..." required></textarea>
+        <button class="addBtn" type="submit">Add Comment</button>
+      </form>
+    </section>
+    <a class="cancelBtn" role="button" href="/posts">Cancel</a>
+  </main>
+  <script>
+    // Upvote
+    document.querySelectorAll(".upvoteBtn").forEach((button) => {
+      button.addEventListener("click", function (event) {
+        event.preventDefault();
+        //get post id from the data attribute
+        const postId = this.getAttribute("data-postid");
+
+        //find the vote count element
+        const countElement = document.getElementById(`upvoteCount_${postId}`);
+        //increment the count
+        let count = parseInt(countElement.textContent);
+        count++;
+        //update the count
+        countElement.textContent = count;
+      });
+    });
+
+    //downvote
+    document.querySelectorAll(".downvoteBtn").forEach((button) => {
+      button.addEventListener("click", function (event) {
+        event.preventDefault();
+        // Get the post ID from the data attribute
+        const postId = this.getAttribute("data-postid");
+        // Find the count element
+        const countElement = document.getElementById(
+          `downvoteCount_${postId}`
+        );
+        // Increment the count
+        let count = parseInt(countElement.textContent);
+        count++;
+        // Update the count element
+        countElement.textContent = count;
+      });
+    });
+  </script>
+</body>
+
+</html>

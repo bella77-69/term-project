@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css" />
+  <link href="/css/style.css" rel="stylesheet" />
+  <title>Delete Post</title>
+</head>
+
+<body>
+  <main>
+    <header class="authOptions">
+      <h1>Delete Post</h1>
+      <div class="authBtn">
+        <a role="button" href="/posts">Home</a>
+        <a role="button" href="/subs/list">Subgroups</a>
+      </div>
+    </header>
+    <div>
+      <section>
+        <ul class="list">
+          <li class="list-item">Title: <%= post.title %>
+          </li>
+          <li>
+            Description: <%= post.description %>
+          </li>
+          <li>Subgroup: <%= post.subgroup %>
+          </li>
+          <li>
+            Post Link: <a href="<%= post.link %>">Read More</a>
+          </li>
+          <li>Creator: <%= post.creator.uname %>
+          </li>
+        </ul>
+        <% if (post.creator.id===currentUser) { %>
+          <form action="/posts/delete/<%= post.id %>" method="POST">
+            <input type="hidden" name="_method" value="DELETE" />
+            <button class="deleteBtn" type="submit">
+              Confirm Delete
+            </button>
+          </form>
+          <% } else { %>
+            <p>You do not have permission to delete this post.</p>
+            <% } %>
+              <a class='cancelBtn' role="button" href="/posts/show/<%=post.id%>">Cancel</a>
+      </section>
+    </div>
+  </main>
+</body>
+
+</html>

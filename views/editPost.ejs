@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css" />
+  <link href="/css/style.css" rel="stylesheet" />
+  <title>EditPost</title>
+</head>
+
+<body>
+  <main>
+    <header class="authOptions">
+      <h1>Edit Post</h1>
+      <div class="authBtn">
+        <a class="headerBtn" role="button" href="/posts">Home</a>
+        <a class="headerBtn" role="button" href="/subs/list">Subgroups</a>
+      </div>
+    </header>
+    <form action="/posts/edit/<%= post.id %>" method="post">
+      <label for="title">Title:</label><br />
+      <input type="text" id="title" name="title" value="<%= post.title %>" readonly /><br />
+      <label for="link">Link:</label><br />
+      <input type="url" id="link" name="link" value="<%= post.link %>" /><br />
+      <label for="description">Description:</label><br />
+      <textarea id="description" name="description"><%= post.description %></textarea><br />
+      <label for="subgroup">Subgroup:</label><br />
+      <input type="text" id="subgroup" name="subgroup" value="<%= post.subgroup %>" /><br />
+      <% if (post.creator.id===currentUser) { %>
+
+        <button class="editBtn" type="submit">Edit Post</button>
+        <% } else { %>
+          <p>You do not have permission to edit this post.</p>
+          <% } %>
+    </form>
+    <a class="cancelBtn" role="button" href="/posts">Cancel</a>
+  </main>
+</body>
+
+</html>

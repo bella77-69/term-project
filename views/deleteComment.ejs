@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css" />
+  <link href="/css/style.css" rel="stylesheet" />
+  <title>Delete Comment</title>
+</head>
+
+<body>
+  <main>
+    <header class="authOptions">
+      <h1>Delete Comment</h1>
+      <div class="authBtn">
+        <a role="button" href="/posts">Home</a>
+        <a role="button" href="/subs/list">Subgroups</a>
+      </div>
+    </header>
+    <div>
+      <section>
+        <ul class="list">
+          <div class="comment-content">
+            <strong>Comment: <%= comment.description %></strong>
+          </div>
+        </ul>
+        <% if (currentUser && currentUser===comment.creator) { %>
+          <form action="/comments/comment-delete/<%= postId %>/<%= comment.id %>" method="POST">
+            <input type="hidden" name="_method" value="DELETE" />
+            <button class="deleteBtn" type="submit">Confirm Delete</button>
+          </form>
+          <% } else { %>
+            <p>You do not have permission to delete this comment.</p>
+            <% } %>
+              <a class="cancelBtn" role="button" href="/comments/show/<%= postId %>">Cancel</a>
+      </section>
+    </div>
+  </main>
+</body>
+
+</html>
